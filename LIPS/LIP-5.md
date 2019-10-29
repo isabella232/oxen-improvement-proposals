@@ -1,7 +1,7 @@
 ```
 Metadata 
 LIP Number: 5 
-Title: Pulse [Foundation Vote] [Not Yet Voted]
+Title: Pulse [Foundation Vote] [APPROVED]
 Author/s: Kee Jefferys
 Status: Final 
 Type: Core
