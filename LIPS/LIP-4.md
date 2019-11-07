@@ -1,27 +1,16 @@
 # Loki Blink Design
 
-## Metadata
+```Metadata
+LIP Number: LIP-4
+Title: Loki Blink \[No Vote\]
+Author: Jason Rhinelander (@jagerman) <jason@loki.network>
+Status: Final, Implementation ongoing here https://github.com/loki-project/loki/pull/915
+Type: Core
+Created: 2019-06-06
+Requires: LIP-3 (checkpointing)
+```
 
-**LIP Number**: LIP-4
-
-**Title**: Loki Blink \[No Vote\]
-
-**Author**: Jason Rhinelander (@jagerman) <jason@loki.network>
-
-**Status**: Draft
-
-**Type**: Core
-
-**Created**: 2019-06-06
-
-**Requires**: LIP-3 (checkpointing)
-
-# Version history
-
-  - *v0.9*
-      - initial public draft
-
-# 1 Summary
+## 1 Summary
 
 Blink is Loki’s instant payment mechanism proposed in the original Loki
 whitepaper. Once completed, Blink will allow users to send payments
@@ -32,7 +21,7 @@ This document is intended to serve as a whitepaper underlying the
 concrete design for the implementation of Loki Blink with an expectation
 of inclusion in the 5.0.0 release.
 
-# 2 Abstract
+## 2 Abstract
 
 Blink takes advantage of Loki’s service node layer and [checkpointing
 mechanism](LIP-3.md) to provide a strong assurance that a transaction
@@ -44,9 +33,9 @@ consensus rules help ensure that such validated transfers have a strong
 assurance of reaching the transaction memory pool and thus can be relied
 upon without requiring mining confirmations.
 
-# 3 Blink from the user perspective
+## 3 Blink from the user perspective
 
-## 3.1 Wallet side
+### 3.1 Wallet side
 
 From the user (wallet) side, initiating a Blink transfer is nearly
 identical to initiating a normal transfer, but with an extra flag
@@ -68,7 +57,7 @@ can send off a regular (non-Blink) transaction that spends the received
 Blink outputs instantly without needing to wait for the Blink
 transaction to be mined into a block.
 
-## 3.2 Re-blinking
+### 3.2 Re-blinking
 
 One of the goals of Blink is the ability to “re-Blink”: That is, we want
 a Blink transaction to be instantly available to the recipient
@@ -80,7 +69,7 @@ can instantly Blink it to someone else, send a regular transaction, or
 use it to stake a new service node without waiting for even a single
 confirmation.
 
-## 3.3 Fees
+### 3.3 Fees
 
 The precise fee schedule is yet to be determined, but will be an
 additional amount on top of the current transaction fee, most likely
@@ -145,9 +134,9 @@ two approaches, we decided to pursue method 2. (Of course, like anything
 in Loki, we can always change the design later given compelling reasons
 to do so\!)
 
-# 4 Technical design
+## 4 Technical design
 
-## 4.1 Transaction overview
+### 4.1 Transaction overview
 
 In a nutshell (with most of the details covered later in this document):
 The wallet builds a transaction and sends it to the lokid to be blinked.
@@ -226,7 +215,7 @@ In more detail:
     quorum nodes it contacted, and once received (or timed out), sends
     this information back to the wallet.
 
-## 4.2 Quorum selection
+### 4.2 Quorum selection
 
 Quorum selection works by using the requested signing height *h* to
 deterministically select the two relevant quorums, *Q* and *Q’*. A
@@ -275,7 +264,7 @@ if the next Blink transaction switches to a new quorum, the overlap
 ensures that it simply switching to a quorum that has already locked any
 key images of Blink transactions submitted in the last few blocks.
 
-### 4.2.1 Overlapping quorums rationale
+#### 4.2.1 Overlapping quorums rationale
 
 There are three reasons for using these two overlapping quorums. First,
 we want the quorum signature process to “reach” a few blocks into the
@@ -349,7 +338,7 @@ could also be possible to enable an opt-in triple quorum, at a higher
 fee, to allow users to send with a paranoid level of assurance. (This is
 now, however, part of the current Blink plan.)
 
-### 4.2.2 Quorum selection block and checkpointing rationale
+#### 4.2.2 Quorum selection block and checkpointing rationale
 
 Using a lag of 30 blocks for quorum determination was chosen to interact
 with Loki checkpointing. Unlike checkpointing and deregistration
@@ -385,13 +374,13 @@ Blink transactions are secure by preferring to fail a Blink signature
 rather than include one that has any chance of being invalidated by a
 block reorganization.
 
-## 4.3 Quorum validation
+### 4.3 Quorum validation
 
 Some potential cases are depicted below:
 
 ![Figure 2: Transactions and quorums](../assets/lip-4/quorums.svg)
 
-### 4.3.1 TX example one
+#### 4.3.1 TX example one
 
 *TX₁* is depicting a transaction submitted to a daemon which sees the
 current height of the network at 1002. We can think about a few
@@ -440,7 +429,7 @@ submitted; since Blink dissemination is high-priority this should result
 in a high level of assuredness that a Blink double-spend cannot be
 performed in this scenario.
 
-### 4.3.2 TX example two
+#### 4.3.2 TX example two
 
 *TX₂* in Figure 2 shows a transaction that is sent via a lokid that sees
 the current *h=1006*, i.e. in the second block of quorum *Q₂*. I’ll just
@@ -464,7 +453,7 @@ a blink transaction could be submitted to a completely independent
 quorum pair. There is a potential issue here from an attacker, discussed
 in further detail below.
 
-### 4.3.3 TX example three
+#### 4.3.3 TX example three
 
 *TX₃* is included for completeness to show that cheating *ahead* by a
 quorum has no advantage for a potential attacker. This depicts the
@@ -477,7 +466,7 @@ Stats geek note: the probability of being 3+ blocks behind the network
 with lag *L* seconds is the CDF value of a Poisson distribution with
 λ=*L*/120 at *k*=3.
 
-## 4.4 Repeated signing of the same transaction
+### 4.4 Repeated signing of the same transaction
 
 One possible Blink failure mode is that the requested signature height,
 *h*, is seen as too old (or even too new) by some or all members of the
@@ -494,7 +483,7 @@ exception to the normal key image blacklisting if asked to re-sign the
 exact same transaction for which the key images were
 blacklisted.
 
-## 4.5 Signature failure: key images may stay unblinkable (for up to 10 blocks).
+### 4.5 Signature failure: key images may stay unblinkable (for up to 10 blocks).
 
 When a service node signs a transaction as part of a given quorum it
 will never sign a different transaction containing any of the same key
@@ -527,7 +516,7 @@ wallets. It’s possible, of course, but given the rarity and the
 relatively minor consequence (not being able to Blink those outputs for
 10–20 minutes) for now we will simple leave this as a known limitation.
 
-## 4.6 Blink transactions entering the mempool
+### 4.6 Blink transactions entering the mempool
 
 Blink transactions themselves are perfectly ordinary transactions on the
 blockchain: the signatures applied by service nodes do *not* end up as
@@ -599,7 +588,7 @@ be) identical across the network in terms of attached quorum signatures:
 it is entirely possible for two nodes to receive a *different* set of 14
 signatures: so long as all are valid for the quorum
 
-## 4.7 Blink transactions entering the blockchain
+### 4.7 Blink transactions entering the blockchain
 
 A transaction entering the blockchain from the mempool requires two
 changes: first, the Blink transaction’s unspent amount now includes both
@@ -612,7 +601,7 @@ in a block before the block in which B is included. This requires, of
 course, changes to the transaction selection algorithm used to construct
 block templates for miners.
 
-## 4.8 Re-Blinking implementation
+### 4.8 Re-Blinking implementation
 
 As discussed in [Re-blinking](#32-re-blinking) we need received Blink funds
 to be instantly spendable. That means that the recipient’s wallet needs
@@ -625,7 +614,7 @@ in the mempool. We need to update lokid and the wallet allow this.
 This does, however, raise another important issue, addressed in the next
 section.
 
-## 4.9 Ring signature implications
+### 4.9 Ring signature implications
 
 The anonymity in Loki depends on the actual and decoy outputs being
 included in the transaction ring signature being indistinguishable.
@@ -665,7 +654,7 @@ potentially include Blink dummy transactions in *all* transactions
 (which has the separate advantage of simplifying the code: building a
 Blink transaction and building a regular transaction will be identical).
 
-## 4.10 Blink and checkpoints
+### 4.10 Blink and checkpoints
 
 Blink transaction metadata (i.e. quorum signatures, signing height) is
 meant to be temporary data that only needs to be kept until the
@@ -675,7 +664,7 @@ has passed the point where it is not reversible—that is, once it has
 been signed by three checkpoint quorums—service nodes can discard the
 metadata.
 
-## 4.11 Quorum communication
+### 4.11 Quorum communication
 
 Current quorum communication (e.g. for deregistration voting or for the
 upcoming checkpointing support) relies on a gossip protocol to carry
@@ -729,7 +718,7 @@ connection to some of the nodes in the following quorum over which
 messages will be passed when a quorum has acquired the required
 supermajority of signatures.
 
-## 4.12 Service node deregistrations
+### 4.12 Service node deregistrations
 
 As discussed in the [Quorum Selection](#42-quorum-selection) section, the
 service nodes that make up a quorum are chosen by excluding service
@@ -770,13 +759,13 @@ deregistrations). Should this prove problematic, the recommended
 approach is to increase the quorum size, slightly reduce the
 supermajority requirement, or both.
 
-# 5 Potential attacks
+## 5 Potential attacks
 
 While the basics of the above in normal operation are fine, there are
 several edge cases that need to be addressed specifically to prevent
 accidental conflict or deliberate attacks.
 
-## 5.1 Double-spending Blink tx + non-Blink tx
+### 5.1 Double-spending Blink tx + non-Blink tx
 
 This attack would work by privately mining a block where the inputs used
 in a Blink transaction are spent, conducting a Blink transaction, then
@@ -797,7 +786,7 @@ There is a limitation to this, however: if the conflicting block has
 passed an irreversible checkpoint boundary then it is instead the Blink
 transaction that is invalid.[\[6\]](#user-content-fn6)
 
-## 5.2 Double-spending Blink + Blink
+### 5.2 Double-spending Blink + Blink
 
 Sending two parallel Blink transactions that spend some of the same
 inputs at the same signing height *h* isn’t possible: the approving
@@ -809,7 +798,7 @@ Sending two Blink transactions at different heights, however, can be a
 potential issue if exploited by something I will call “quorum hopping”
 and address in the next section.
 
-## 5.3 Quorum hopping
+### 5.3 Quorum hopping
 
 In order to double-spend Blink transactions it is necessary to “quorum
 hop” – that is, to have your transaction signed by two independent sets
@@ -913,7 +902,7 @@ accidentally hitting the delay is small. Even if they *do* hit it
 because of extremely bad luck, the only consequence is a delay of at
 most 5 seconds for their Blink confirmation.
 
-## 5.4 Signature withholding
+### 5.4 Signature withholding
 
 The design requires the Blink quorum itself to disseminate the Blink
 transaction to the network. This has one potential advantage of having
@@ -943,7 +932,7 @@ will be broadcast to the network from 14–20 well-connected nodes. As a
 side effect, this broad dissemination method also ensures that Blink
 transactions reach all nodes very quickly.
 
-## 5.5 51% attack to reorganize the Blink quorum
+### 5.5 51% attack to reorganize the Blink quorum
 
 The idea behind this attack is that an attacker would submit a blink
 transaction then attempt to invalidate it by using a 51% attack to
@@ -956,13 +945,13 @@ selection block and checkpointing
 rationale](#422-quorum-selection-block-and-checkpointing-rationale) for more
 details.
 
-# 6 Future ideas
+## 6 Future ideas
 
 There are myriad ways the Blink implementation could be extended and
 advanced; this section is laying out some of them. Note that there is no
 guarantee that all of these will be implemented.
 
-## 6.1 Dynamic fees
+### 6.1 Dynamic fees
 
 In the [Fees](#33-fees) section we currently mandate that the miner
 transaction fee for a Blink transaction must always be set to the
@@ -974,7 +963,7 @@ the Blink height to calculate a fee. The Blink portion of the fee could
 similarly be dynamic based on the number of recent Blink transactions on
 the blockchain.
 
-## 6.2 Merging transactions
+### 6.2 Merging transactions
 
 Given a pair of Blink transactions on the mempool, it ought to be
 possible to merge them into a single transaction. For example, if Kee
@@ -992,7 +981,7 @@ In theory this combining could also be done for regular transactions,
 but starting this with Blink with its much stronger guarantees of
 blockchain acceptance seems safer.
 
-## 6.3 Allowing different Blink supermajority levels
+### 6.3 Allowing different Blink supermajority levels
 
 In this plan we simply specify a quorum of 10 and supermajority of 7. It
 seems plausible, however, to let advanced users require an extra
@@ -1024,7 +1013,7 @@ secure. Users who need an extra paranoid level of security will always
 be better off using a regular transaction and waiting for many
 confirmations plus service node checkpoints.
 
-## 6.4 Quorum communication via mesh network
+### 6.4 Quorum communication via mesh network
 
 The idea proposed above for intra-quorum communication is simple, but
 probably does not scale well to larger quorum (such as the 20-node
@@ -1035,7 +1024,7 @@ routing is required) and slightly reduces the speed, but network latency
 is less of a concern for checkpointing than it is for Blink
 transactions.
 
-## 6.5 Carrying traffic over lokinet
+### 6.5 Carrying traffic over lokinet
 
 One aspect to consider in the future is the possibility of carrying all
 blink coordination traffic over lokinet rather than establishing direct
@@ -1070,7 +1059,7 @@ Another possibility is to include some sort of flag to tell lokinet to
 not consider this a connection for the purposes of maintaining the
 minimum connection count.
 
-# *Footnotes*
+## *Footnotes*
 
 <ol>
 <li id="fn1">  This split is purely for the sake of example and not meant to be
