@@ -1,40 +1,40 @@
-# LIP (Loki Improvement Proposal)
-Loki Improvement Proposals (LIPs) are the formalized methods by which the Loki Project Team, external contributors or contractors can make proposals for any major Loki or Lokinet upgrades, this can including core protocol specifications, client APIs, and additional features. LIP's should also be used to describe any Major changes that go before Loki Service Nodes to vote on, outside of non relevant requests handled oy the Loki funding system. 
+# OIP (Oxen Improvement Proposal)
+Oxen Improvement Proposals (OIPs) are the formalized methods by which the Oxen Project Team, external contributors or contractors can make proposals for any major Oxen or Lokinet upgrades, this can including core protocol specifications, client APIs, and additional features.
 
-A LIP is supposed to be championed by the proposer, this means that LIP’s do not always present an objective view of the situation, ultimately it is the role of the Service Nodes or The Loki Foundation (depending on the proposed voter) to decide of the efficacy of a LIP, these decisions should be impacted by community sentiment and dissenting technical arguments.  
+A OIP is supposed to be championed by the proposer, this means that OIP’s do not always present an objective view of the situation, ultimately it is the role of the Service Nodes or The OPTF (depending on the proposed voter) to decide of the efficacy of a OIP, these decisions should be impacted by community sentiment and dissenting technical arguments.  
 
-LIPs can also act as supplementary documents for funding applications  to the Loki foundation, or Loki funding system.
+OIPs can also act as supplementary documents for funding applications  to the OPTF, or Oxen funding system.
 
 # Contributing
 
-Anyone is free to propose an LIP, if they follow the formatting rules setout in this document. 
+Anyone is free to propose an OIP, if they follow the formatting rules setout in this document. 
 
  1. Fork the repository by clicking "Fork" in the top right.
- 2. Read the [LIP-x](lip-X.md) template to understand how a LIP should be structured
- 2. Add your LIP, in the LIP's folder [Here](https://github.com/loki-project/LIPs/tree/master/LIPS) of your fork.
- 3. Submit a Pull Request to Loki's [LIPs repository](https://github.com/loki-project/LIPs) from your fork.
+ 2. Read the [LIP-x](lip-X.md) template to understand how a OIP should be structured
+ 2. Add your OIP, in the OIP's folder [Here](https://github.com/oxen-io/oxen-improvement-proposals/tree/master/LIPS) of your fork.
+ 3. Submit a Pull Request to Oxen's [LIPs repository](https://github.com/oxen-io/oxen-improvement-proposals) from your fork.
 
-Your first PR should be a first draft of the final LIP. An editor will manually review the first PR for a new LIP and assign it a number before merging it. All discussion should occur inside of the LIP.
+Your first PR should be a first draft of the final OIP. An editor will manually review the first PR for a new OIP and assign it a number before merging it. All discussion should occur inside of the OIP.
 
-If your LIP requires images, the image files should be included in a subdirectory of the `assets` folder for that LIP as follow: `assets/lip-X` (for lip **X**). When linking to an image in the LIP, use relative links such as `../assets/lip-X/image.png`.
+If your OIP requires images, the image files should be included in a subdirectory of the `assets` folder for that OIP as follow: `assets/lip-X` (for lip **X**). When linking to an image in the OIP, use relative links such as `../assets/lip-X/image.png`.
 
-There are two main progression routes for LIP's
+There are two main progression routes for OIP's
 
-**Submitting your LIP for Vote**
+**Submitting your OIP for Vote**
 
-If you are submitting your LIP for vote by the Loki Foundation or the Loki Service Nodes you should tag the title of your request as per LIP-x Specs with either [Foundation Vote] or [Service Node Vote]. If the Foundation or Service Nodes approve your LIP then an editor will tag your LIP as finalized. If the Service Nodes or the Foundation denies your LIP then your pull request will be closed, you are free to make another proposal which addresses any concerns raised by the foundation or Service Node operators and re-propose your LIP.
+If you are submitting your OIP for vote by the OPTF or the Oxen Service Nodes you should tag the title of your request as per OIP-x Specs with either [Foundation Vote] or [Service Node Vote]. If the OPTF or Service Nodes approve your OIP then an editor will tag your OIP as finalized. If the Service Nodes or the Foundation denies your OIP then your pull request will be closed, you are free to make another proposal which addresses any concerns raised by the foundation or Service Node operators and re-propose your OIP.
 
-**LIP Assessment by the Loki Project Team**
+**OIP Assessment by the Oxen Project Team**
 
-If you believe your LIP does not need to be voted on by the Loki Foundation or Service Nodes then you can tag your LIP as a [No Vote]. If a LIP is tagged with [No Vote] your LIP editor may still refer your LIP to a vote by the Foundation or Service Nodes if they believe the LIP is controversial or the discussion around the LIP does not reach consensus.
-If the LIP does not need to go to a vote then the LIP editor should decide when the LIP is ready to be marked as final. 
+If you believe your OIP does not need to be voted on by the OPTF or Service Nodes then you can tag your OIP as a [No Vote]. If a OIP is tagged with [No Vote] your OIP editor may still refer your OIP to a vote by the Foundation or Service Nodes if they believe the OIP is controversial or the discussion around the OIP does not reach consensus.
+If the OIP does not need to go to a vote then the OIP editor should decide when the OIP is ready to be marked as final. 
 
-**LIP Finalized**
+**OIP Finalized**
 
-Once an LIP is finalized the Loki development team will work alongside you to help you merge your changes into the development branch of Loki, any pull request to Loki should reference relevant LIPs if the change is major. if your LIP is marked as Final but does not yet have developed code, we encourage regular communication to the community using the LIP pull request as a sounding board.
+Once an OIP is finalized the Oxen development team will work alongside you to help you merge your changes into the development branch of Oxen, any pull request to Oxen should reference relevant OIPs if the change is major. if your OIP is marked as Final but does not yet have developed code, we encourage regular communication to the community using the OIP pull request as a sounding board.
 
-# LIP Status Terms
-* **Draft** - an LIP that is undergoing rapid iteration and changes
-* **Last Call** - an LIP that is done with its initial iteration and ready for review by a wide audience
-* **Denied** - an LIP that has been rejected by either a vote from the Loki Service Nodes, the Loki foundation or the LIP editor.
-* **Final** - an LIP that the Loki Project team have decide to implement and release in a future hard fork or has already been released in a hard fork
+# OIP Status Terms
+* **Draft** - an OIP that is undergoing rapid iteration and changes
+* **Last Call** - an OIP that is done with its initial iteration and ready for review by a wide audience
+* **Denied** - an OIP that has been rejected by either a vote from the Oxen Service Nodes, the OPTF or the OIP editor.
+* **Final** - an OIP that the Oxen Project team have decide to implement and release in a future hard fork or has already been released in a hard fork
